@@ -5,9 +5,11 @@
     For example "comments throwing an exception should not stop auto refresh"
  */
 define([
-    'raven'
+    'raven',
+    'fastdom'
 ], function (
-    raven
+    raven,
+    fastdom
 ) {
     function Robust(name, block, reporter) {
 
@@ -15,11 +17,13 @@ define([
             reporter = raven.captureException;
         }
 
-        try {
-            block();
-        } catch (e) {
-            reporter(e, { tags: { module: name } });
-        }
+        fastdom.defer(function () {
+            try {
+                block();
+            } catch (e) {
+                reporter(e, { tags: { module: name } });
+            }
+        });
     }
 
     return Robust;

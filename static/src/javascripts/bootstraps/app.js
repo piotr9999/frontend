@@ -4,6 +4,7 @@ define([
     'common/utils/config',
     'common/utils/detect',
     'common/utils/mediator',
+    'common/utils/robust',
     'common/utils/user-timing',
     'bootstraps/article',
     'bootstraps/common',
@@ -18,6 +19,7 @@ define([
     config,
     detect,
     mediator,
+    robust,
     userTiming,
     article,
     common,
@@ -29,11 +31,7 @@ define([
 ) {
 
     var bootstrapContext = function (featureName, boostrap) {
-            raven.context(
-                { tags: { feature: featureName } },
-                boostrap.init,
-                []
-            );
+            robust(featureName, boostrap.init);
         },
 
         routes = function () {
